@@ -8,7 +8,7 @@
     "dev": "tsx --watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc -p tsconfig.build.json",
-    "build:deploy": "pnpm db:migrate:deploy && pnpm build",
+    "build:deploy": "pnpm db:generate && pnpm db:migrate:deploy && pnpm build",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
