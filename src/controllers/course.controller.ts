@@ -1,8 +1,7 @@
 import asyncHandler from "express-async-handler";
-import { Request, Response } from "express";
-import { getAllCourses, getUserCourseAccessList } from "#services/course.service.js";
-import { tryCatch } from "#utils/tryCatch.js"; // adjust path to your tryCatch file
-import { AuthenticatedRequest } from "#middleware/authMiddleware.js";
+import { getAllCourses, getUserCourseAccessList } from "../services/course.service.js";
+import { tryCatch } from "../utils/tryCatch.js";
+import { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 
 export const getCourseHandler = asyncHandler(async (req, res) => {
   const { user } = req as AuthenticatedRequest;
@@ -12,10 +11,10 @@ export const getCourseHandler = asyncHandler(async (req, res) => {
     res.status(500).json({
       success: false,
       error: "Failed to fetch courses",
-      details: coursesError.message
+      details: coursesError.message,
     });
 
-    return
+    return;
   }
 
   const { data: unlockedCourseIds, error: accessError } = await tryCatch(getUserCourseAccessList(user.id));
@@ -23,20 +22,20 @@ export const getCourseHandler = asyncHandler(async (req, res) => {
     res.status(500).json({
       success: false,
       error: "Failed to fetch user course access",
-      details: accessError.message
+      details: accessError.message,
     });
 
-    return
+    return;
   }
 
-  const result = allCourses.map(course => ({
+  const result = allCourses.map((course) => ({
     title: course.title,
     videoUrl: unlockedCourseIds.has(course.id) ? course.video_url : null,
-    isLocked: !unlockedCourseIds.has(course.id)
+    isLocked: !unlockedCourseIds.has(course.id),
   }));
 
   res.status(200).json({
     success: true,
-    data: result
+    data: result,
   });
 });

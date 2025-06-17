@@ -16,7 +16,7 @@ pnpm install
 
 # 3. Set environment variables
 cp .env.example .env
-# (Update .env with your PostgreSQL DB and SECRET for JWT)
+# (Update .env with your PostgreSQL DB and SECRET for JWT or use docker with docker-compose)
 
 # 4. Setup and seed the database
 pnpm db:generate

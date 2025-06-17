@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx --watch --env-file .env src/server.ts",
     "start": "node --env-file .env dist/server.js",
     "build": "tsc -p tsconfig.build.json",
+    "build:deploy": "pnpm db:generate && pnpm db:migrate && pnpm db:migrate:deploy && pnpm build",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -14,17 +16,14 @@
     "format:check": "prettier --check .",
     "db:generate": "prisma generate --schema=./src/models/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=./src/models/schema.prisma",
+    "db:migrate:deploy": "prisma migrate deploy --schema=./src/models/schema.prisma",
     "db:push": "prisma db push --schema=./src/models/schema.prisma",
     "db:studio": "prisma studio --schema=./src/models/schema.prisma",
-    "db:introspect": "prisma db introspect --schema=./src/models/schema.prisma",
     "db:format": "prisma format --schema=./src/models/schema.prisma",
     "db:seed": "prisma db seed"
   },
   "prisma": {
     "seed": "tsx ./src/models/seed.ts"
-  },
-  "imports": {
-    "#*": "./src/*"
   },
   "keywords": [],
   "author": "",

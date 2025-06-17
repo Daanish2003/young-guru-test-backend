@@ -1,11 +1,11 @@
 import cors from 'cors';
 import express from 'express';
 import "dotenv/config";
-import auth_router from '#routes/auth.route.js';
-import test_matching_router from '#routes/test.route.js';
-import course_router from '#routes/course.route.js';
-import payment_router from '#routes/payment.route.js';
-import call_router from '#routes/call.route.js';
+import auth_router from './routes/auth.route.js';
+import test_matching_router from './routes/test.route.js';
+import course_router from './routes/course.route.js';
+import payment_router from './routes/payment.route.js';
+import call_router from './routes/call.route.js';
 
 const app = express();
 

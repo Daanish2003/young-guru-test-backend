@@ -1,17 +1,17 @@
-import { questions } from "#config/test.config.js";
-import { AuthenticatedRequest } from "#middleware/authMiddleware.js";
-import { LevelEnum } from "#models/generated/prisma/enums.js";
-import { updateUserLevel } from "#services/test.service.js";
-import { tryCatch } from "#utils/tryCatch.js";
-import { TestSubmitSchema } from "#utils/zod.js";
+import { LevelEnum } from "@prisma/client";
+import { questions } from "../config/test.config.js";
+import { AuthenticatedRequest } from "../middleware/authMiddleware.js";
+import { updateUserLevel } from "../services/test.service.js";
+import { tryCatch } from "../utils/tryCatch.js";
+import { TestSubmitSchema } from "../utils/zod.js";
 import asyncHandler from "express-async-handler";
 
 export const testStartHandler = asyncHandler(async (req, res): Promise<void> => {
-    const sanitizedQuestions = questions.map(({ answer, ...rest }) => rest);
+  const sanitizedQuestions = questions.map(({ answer, ...rest }) => rest);
 
-    res.status(200).json({
-        questions: sanitizedQuestions
-    });
+  res.status(200).json({
+    questions: sanitizedQuestions,
+  });
 });
 
 export const testSubmitHandler = asyncHandler(async (req, res) => {
@@ -38,10 +38,13 @@ export const testSubmitHandler = asyncHandler(async (req, res) => {
     return;
   }
 
-  const correctAnswerMap = questions.reduce((map, q) => {
-    map[q.id] = q.answer;
-    return map;
-  }, {} as Record<string, string>);
+  const correctAnswerMap = questions.reduce(
+    (map, q) => {
+      map[q.id] = q.answer;
+      return map;
+    },
+    {} as Record<string, string>,
+  );
 
   // Calculate score
   let score = 0;
@@ -79,4 +82,3 @@ export const testSubmitHandler = asyncHandler(async (req, res) => {
     level,
   });
 });
-

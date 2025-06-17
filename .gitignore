@@ -119,4 +119,4 @@ dist
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
 
-./src/models/generated/prisma
+/src/models/generated/*

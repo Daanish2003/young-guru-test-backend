@@ -1,16 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
-import { SessionPayload, verifyJWT } from "#services/auth.service.js";
+import { SessionPayload, verifyJWT } from "../services/auth.service.js";
 
 export type AuthenticatedRequest = Request & {
   user: SessionPayload;
 };
 
-export const authMiddleware = asyncHandler(async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authMiddleware = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -22,7 +18,7 @@ export const authMiddleware = asyncHandler(async (
 
   const decryptedData = await verifyJWT(token);
 
-  if(!decryptedData) {
+  if (!decryptedData) {
     res.status(401);
     throw new Error("Unauthorized: Invalid token");
   }
