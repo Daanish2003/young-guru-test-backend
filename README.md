@@ -24,6 +24,7 @@ pnpm db:seed
 
 # 5. Start the server
 pnpm dev
+```
 
 ## 🧩 Tech Stack Used
 
