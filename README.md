@@ -5,25 +5,44 @@ A modular backend for **Young Guru Academy**, a mobile-first spoken English app.
 
 ## 🔧 How to Run the Project Locally
 
+### 1. Clone the repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/Daanish2003/young-guru-test-backend.git
 cd young-guru-test-backend
+```
 
-# 2. Install dependencies
+### 2. Install dependencies
+```bash
 pnpm install
+```
 
-# 3. Set environment variables
+### 3. Set environment variables
+```
 cp .env.example .env
-# (Update .env with your PostgreSQL DB and SECRET for JWT or use docker with docker-compose)
+```
+Update .env with the following values:
+```
+PORT=3000
+POSTGRES_USER=postgres_user
+POSTGRES_PASSWORD=postgres_password
+DATABASE_URL=postgresql://postgres_user:postgres_password@db:5432/TestDB // add your db url or use docker if you installed by running docker compose up -d
+SECRET=secret_user
+```
 
-# 4. Setup and seed the database
+### 4. Setup and seed the database
+```bash
 pnpm db:generate
 pnpm db:push
 pnpm db:seed
+```
 
-# 5. Start the server
+### 5. Start the server
+```
 pnpm dev
+```
+### 6. Visit URL
+```
+localhost:3000 // your app running
 ```
 
 ## 🧩 Tech Stack Used
