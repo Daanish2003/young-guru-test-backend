@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LevelEnum {
+  Beginner
+  Intermediate
+  Advanced
+}
+
+enum PaymentStatus {
+  Created
+  Failed
+  Success
+}
+
+model User {
+  id                     String         @id @default(cuid())
+  phone                  String         @unique
+  level                  LevelEnum      @default(Beginner)
+  created_at             DateTime       @default(now())
+  logins                 Login[]
+  payments               Payment[]
+  courseAccesses         CourseAccess[]
+  callSessionsAsCaller   CallSession[]  @relation("CallerSessions")
+  callSessionsAsReceiver CallSession[]  @relation("ReceiverSessions")
+}
+
+model Login {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String
+  login_time DateTime @default(now())
+  ip_address String
+}
+
+model Course {
+  id             String         @id @default(cuid())
+  title          String
+  video_url      String
+  is_locked      Boolean        @default(true)
+  courseAccesses CourseAccess[]
+
+  Payment Payment[]
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  user      User          @relation(fields: [user_id], references: [id])
+  user_id   String
+  order_id  String        @unique @default(cuid())
+  amount    Float
+  status    PaymentStatus
+  course    Course        @relation(fields: [course_id], references: [id])
+  course_id String
+}
+
+model CourseAccess {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String
+  course      Course   @relation(fields: [course_id], references: [id])
+  course_id   String
+  unlocked_at DateTime @default(now())
+}
+
+model CallSession {
+  id          String   @id @default(cuid())
+  caller      User     @relation("CallerSessions", fields: [caller_id], references: [id])
+  caller_id   String
+  receiver    User     @relation("ReceiverSessions", fields: [receiver_id], references: [id])
+  receiver_id String
+  channel     String
+  token       String
+  created_at  DateTime @default(now())
+}

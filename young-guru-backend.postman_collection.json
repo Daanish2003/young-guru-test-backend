@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "d335c816-1d28-4274-bee6-92f7868a32f1",
+		"name": "young-guru-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39178843",
+		"_collection_link": "https://test22-5544.postman.co/workspace/8b23ac23-e3a7-42f0-bca7-8a38def30658/collection/39178843-d335c816-1d28-4274-bee6-92f7868a32f1?action=share&source=collection_link&creator=39178843"
+	},
+	"item": [
+		{
+			"name": "🔐 Login API",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phoneNumber\" : \"+918765432109\",\r\n    \"otp\": \"654321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### 📋 Description\n\nThis endpoint verifies the phone number and OTP provided by the user. If valid, it logs the user in by generating a JWT and saving login info with the IP address.\n\n### 📤 Endpoint\n\n```\nPOST /auth/login\n\n ```\n\n---\n\n### 🧾 Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| phoneNumber | string | ✅ | Phone number in E.164 format (e.g. +919876543210) |\n| otp | string | ✅ | OTP sent to the phone number (simulated from `fakeOTPStore`) |\n\n**Example:**\n\n``` json\n{\n  \"phoneNumber\": \"+919876543210\",\n  \"otp\": \"123456\"\n}\n\n ```\n\n---\n\n### 📥 Response\n\n#### ✅ 200 OK\n\n``` json\n{\n  \"success\": true,\n  \"token\": \"<JWT_TOKEN>\",\n  \"message\": \"User has been logged in\"\n}\n\n ```\n\n#### ❌ Error Response\n\n#### 🔸 400 Bad Request – Validation Failed\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Invalid credentials\",\n  \"details\": {\n    \"issues\": [ /* Zod validation errors */ ]\n  }\n}\n\n ```\n\n#### 🔸 401 Unauthorized – Invalid OTP\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Invalid OTP\",\n  \"details\": \"OTP does not match\"\n}\n\n ```\n\n#### 🔸 500 Internal Server Error – DB or Token Issues\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Something went wrong while creating user\",\n  \"details\": \"<error message>\"\n}\n\n ```\n\n#### 🔸 500 Internal Server Error – IP Missing\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"IP address not found\",\n  \"details\": \"Request IP could not be determined from req.ip\"\n}\n\n ```\n\n### 🧪 Simulated OTPs\n\nThese phone numbers will always receive a fixed OTP from the system:\n\n| Phone Number | OTP |\n| --- | --- |\n| +919876543210 | 123456 |\n| +918765432109 | 654321 |\n| +917654321098 | 111111 |\n| +916543210987 | 222222 |\n| +915432109876 | 333333 |\n| +914321098765 | 444444 |\n| +913210987654 | 555555 |\n| +912109876543 | 666666 |\n| +911098765432 | 777777 |\n| +910987654321 | 888888 |\n\n### 👥 Create Test Users\n\nTo test other APIs like **course access**, **test submission**, **payments**, or **audio calls**, you should create at least **two test users**.\n\n#### ✅ Suggested Test Users\n\n| User | Phone Number | OTP |\n| --- | --- | --- |\n| User A | +919876543210 | 123456 |\n| User B | +918765432109 | 654321 |\n\n### 🚀 Next Step\n\nAfter receiving the OTP, call the **Verify OTP API** to complete the login process:\n\n```\nPOST /auth/verify-otp\n\n ```"
+		},
+		{
+			"name": "🧠 Test Submission API",
+			"item": [
+				{
+					"name": "start",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTM0NTI1LCJleHAiOjE3NTAxMzgxMjV9.NhPrNavNTNbE1yKyhqDygMs-bbujfsOANtdmUDYFODo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/test/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"test",
+								"start"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "submit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTMzMzA4LCJleHAiOjE3NTAxMzY5MDh9.C8kbNZ3J5MRokWHTOfeVTu0Lv3JnrohQGHHJys9V5tk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answers\": [\n    { \"questionId\": \"q1\", \"selectedOption\": \"Paris\" },\n    { \"questionId\": \"q2\", \"selectedOption\": \"Mars\" },\n    { \"questionId\": \"q3\", \"selectedOption\": \"William Shakespeare\" },\n    { \"questionId\": \"q4\", \"selectedOption\": \"Pacific\" },\n    { \"questionId\": \"q5\", \"selectedOption\": \"Carbon Dioxide\" },\n    { \"questionId\": \"q6\", \"selectedOption\": \"Water\" },\n    { \"questionId\": \"q7\", \"selectedOption\": \"8\" },\n    { \"questionId\": \"q8\", \"selectedOption\": \"Leonardo da Vinci\" },\n    { \"questionId\": \"q9\", \"selectedOption\": \"Amazon\" },\n    { \"questionId\": \"q10\", \"selectedOption\": \"Portuguese\" },\n    { \"questionId\": \"q11\", \"selectedOption\": \"Mercury\" },\n    { \"questionId\": \"q12\", \"selectedOption\": \"7\" },\n    { \"questionId\": \"q13\", \"selectedOption\": \"Egypt\" },\n    { \"questionId\": \"q14\", \"selectedOption\": \"Piano\" },\n    { \"questionId\": \"q15\", \"selectedOption\": \"100\" },\n    { \"questionId\": \"q16\", \"selectedOption\": \"Honey\" },\n    { \"questionId\": \"q17\", \"selectedOption\": \"Pink\" },\n    { \"questionId\": \"q18\", \"selectedOption\": \"Mercury\" },\n    { \"questionId\": \"q19\", \"selectedOption\": \"2\" },\n    { \"questionId\": \"q20\", \"selectedOption\": \"Saturday\" }\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/test/submit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"test",
+								"submit"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			],
+			"description": "Submits a user's answers to the test, calculates the score, determines their proficiency level, and updates their profile accordingly.\n\n### 🔐 Authorization\n\n**Required** – You must include a valid JWT token in the `Authorization` header:\n\n```\nAuthorization: Bearer <JWT_TOKEN>\n\n ```\n\n---\n\n## 🧾 Endpoint\n\n``` bash\nPOST /test/submit\n\n ```\n\n---\n\n### 📥 Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| answers | array | ✅ | List of submitted answers with questionId and selectedOption |\n\nEach item in the `answers` array should have:\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| questionId | string | ✅ | ID of the question answered |\n| selectedOption | string | ✅ | The option the user selected |\n\n#### 📘 Example\n\n``` json\n{\n  \"answers\": [\n    { \"questionId\": \"q1\", \"selectedOption\": \"Paris\" },\n    { \"questionId\": \"q2\", \"selectedOption\": \"Mars\" },\n    { \"questionId\": \"q3\", \"selectedOption\": \"William Shakespeare\" },\n    { \"questionId\": \"q4\", \"selectedOption\": \"Pacific\" },\n    { \"questionId\": \"q5\", \"selectedOption\": \"Carbon Dioxide\" },\n    { \"questionId\": \"q6\", \"selectedOption\": \"Water\" },\n    { \"questionId\": \"q7\", \"selectedOption\": \"8\" },\n    { \"questionId\": \"q8\", \"selectedOption\": \"Leonardo da Vinci\" },\n    { \"questionId\": \"q9\", \"selectedOption\": \"Amazon\" },\n    { \"questionId\": \"q10\", \"selectedOption\": \"Portuguese\" },\n    { \"questionId\": \"q11\", \"selectedOption\": \"Mercury\" },\n    { \"questionId\": \"q12\", \"selectedOption\": \"7\" },\n    { \"questionId\": \"q13\", \"selectedOption\": \"Egypt\" },\n    { \"questionId\": \"q14\", \"selectedOption\": \"Piano\" },\n    { \"questionId\": \"q15\", \"selectedOption\": \"100\" },\n    { \"questionId\": \"q16\", \"selectedOption\": \"Honey\" },\n    { \"questionId\": \"q17\", \"selectedOption\": \"Pink\" },\n    { \"questionId\": \"q18\", \"selectedOption\": \"Mercury\" },\n    { \"questionId\": \"q19\", \"selectedOption\": \"2\" },\n    { \"questionId\": \"q20\", \"selectedOption\": \"Saturday\" }\n  ]\n}\n\n ```\n\n---\n\n### ✅ Success Response – `200 OK`\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"Test submitted successfully\",\n  \"score\": 12,\n  \"level\": \"Intermediate\"\n}\n\n ```\n\nLevels are determined based on score:\n\n| Score Range | Level |\n| --- | --- |\n| 0 - 7 | Beginner |\n| 8 - 14 | Intermediate |\n| 15+ | Advanced |\n\n---\n\n### ❌ Error Responses\n\n#### 🔸 400 Bad Request – Invalid Schema\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Invalid request data\",\n  \"details\": [ /* Zod validation errors */ ]\n}\n\n ```\n\n#### 🔸 400 Bad Request – Missing Required Data\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Invalid request body\",\n  \"details\": \"userId and answers[] are required\"\n}\n\n ```\n\n#### 🔸 500 Internal Server Error – Level Update Failed\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Failed to update user level\",\n  \"details\": \"<error details>\"\n}\n\n ```\n\n---\n\n### 🧪 Test Instructions\n\n1. First, fetch the question using GET/test/start\n    \n2. Submit the answers to: POST /test/submit\n    \n3. Your score and calculated level will be returned and saved to your profile."
+		},
+		{
+			"name": "💳 Payment APIs",
+			"item": [
+				{
+					"name": "order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTMzMzA4LCJleHAiOjE3NTAxMzY5MDh9.C8kbNZ3J5MRokWHTOfeVTu0Lv3JnrohQGHHJys9V5tk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 999.0,\r\n    \"courseId\": \"cmbzyljbw0000q42e5czywdm8\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/payment/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"payment",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTMzMzA4LCJleHAiOjE3NTAxMzY5MDh9.C8kbNZ3J5MRokWHTOfeVTu0Lv3JnrohQGHHJys9V5tk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"order_id\": \"cmc01fc0y0003q49zh4pmn7xl\",\r\n    \"status\": \"Success\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/payment/verify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"payment",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "APIs to simulate order creation and verify payment to unlock course access for authenticated users.\n\n### 🔐 Authorization\n\nAll payment-related APIs require authentication.\n\nInclude the JWT token in the request headers:\n\n```\nAuthorization: Bearer <JWT_TOKEN>\n\n ```\n\n---\n\n## 🧾 1. Create Payment Order\n\n### 📤 Endpoint\n\n``` bash\nPOST /payment/order\n\n ```\n\n### 📋 Description\n\nSimulates the creation of a payment order for a specific course. Returns a fake order that can be verified.\n\n---\n\n### 📥 Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| amount | number | ✅ | Amount to be paid (in currency units) |\n| courseId | string | ✅ | Course ID you want to unlock |\n\n**Example:**\n\n### ✅ Success Response – `201 Created`\n\n``` json\n{\n  \"success\": true,\n  \"order\": {\n    \"id\": \"internal_db_id\",\n    \"orderId\": \"order_xyz123\",\n    \"amount\": 999.0,\n    \"status\": \"created\",\n    \"courseId\": \"cmbzyljbw0000q42e5czywdm8\"\n  }\n}\n\n ```\n\n---\n\n### ❌ Error Responses\n\n- `400 Bad Request` – Schema validation failed\n    \n- `500 Internal Server Error` – Database/order creation error\n    \n\n---\n\n## ✅ 2. Verify Payment & Unlock Course\n\n### 📤 Endpoint\n\n```\nbashCopy codePOST /payment/verify\n\n ```\n\n### 📋 Description\n\nVerifies the payment status for a given order ID. If the status is `\"success\"`, the user gets access to the associated course.\n\n---\n\n### 📥 Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| order_id | string | ✅ | Order ID returned by `/payment/order` |\n| status | string | ✅ | Should be `\"success\"` to simulate success |\n\n**Example:**\n\n``` json\n{\n  \"order_id\": \"order_xyz123\",\n  \"status\": \"success\"\n}\n\n ```\n\n---\n\n### ✅ Success Response – `200 OK`\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"Payment Verified\",\n  \"payment\": {\n    \"id\": \"internal_db_id\",\n    \"order_id\": \"order_xyz123\",\n    \"amount\": 999,\n    \"status\": \"success\",\n    \"course_id\": \"cmbzyljbw0000q42e5czywdm8\"\n  },\n  \"courseAccess\": {\n    \"user_id\": \"user_xyz\",\n    \"course_id\": \"cmbzyljbw0000q42e5czywdm8\"\n  }\n}\n\n ```\n\n---\n\n### ❌ Error Responses\n\n- `400 Bad Request` – Invalid schema\n    \n- `404 Not Found` – Order not found or access denied\n    \n- `500 Internal Server Error` – Payment status update or course unlock failed\n    \n\n---\n\n### 🧪 Test Instructions\n\n1. Log in as one of the test users to get a JWT.\n    \n2. Call `POST /payment/order` to simulate a payment intent.\n    \n3. Then call `POST /payment/verify` with `status: \"success\"` to simulate a successful payment and unlock the course.\n    \n4. Use the `courseAccess` response to test course-restricted routes."
+		},
+		{
+			"name": "🎓 Course API",
+			"item": [
+				{
+					"name": "get-courses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTMzMzA4LCJleHAiOjE3NTAxMzY5MDh9.C8kbNZ3J5MRokWHTOfeVTu0Lv3JnrohQGHHJys9V5tk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"courses"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+					},
+					"response": []
+				}
+			],
+			"description": "### 📋 Description\n\nFetches the list of all available courses for the authenticated user, indicating whether each course is locked or unlocked. If unlocked, the course's video URL is included.\n\n---\n\n### 🔐 Authorization\n\n**Required** – A valid JWT token must be provided in the `Authorization` header:\n\n```\nAuthorization: Bearer <JWT_TOKEN>\n\n ```\n\n---\n\n## 🧾 Endpoint\n\n``` bash\nGET /courses\n\n ```\n\n---\n\n### 📥 Request\n\nNo request body or query parameters are required. This route depends solely on the authenticated user.\n\n---\n\n### ✅ Success Response – `200 OK`\n\nReturns a list of all available courses, with lock status and video URL (if unlocked).\n\n``` json\n{\n  \"success\": true,\n  \"data\": [\n    {\n      \"title\": \"React for Beginners\",\n      \"videoUrl\": \"https://cdn.example.com/react-course.mp4\",\n      \"isLocked\": false\n    },\n    {\n      \"title\": \"Advanced TypeScript\",\n      \"videoUrl\": null,\n      \"isLocked\": true\n    }\n  ]\n}\n\n ```\n\n---\n\n### ❌ Error Responses\n\n#### 🔸 500 Internal Server Error – Failed to fetch courses\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Failed to fetch courses\",\n  \"details\": \"Database connection error\"\n}\n\n ```\n\n#### 🔸 500 Internal Server Error – Failed to fetch user course access\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Failed to fetch user course access\",\n  \"details\": \"Error retrieving user access list\"\n}\n\n ```\n\n---\n\n### 💡 Notes\n\n- Courses are shown to every user, but the `videoUrl` is only revealed if the user has purchased/unlocked the course.\n    \n- Use the **Payment API** to unlock courses."
+		},
+		{
+			"name": "📞 Audio Call Token API",
+			"item": [
+				{
+					"name": "token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImNtYnp4aHgxbTAwMDBxNGMyOG1lcjJkMzgiLCJsZXZlbCI6IkJlZ2lubmVyIiwicGhvbmUiOiIrOTE5ODc2NTQzMjEwIiwiaWF0IjoxNzUwMTMzMzA4LCJleHAiOjE3NTAxMzY5MDh9.C8kbNZ3J5MRokWHTOfeVTu0Lv3JnrohQGHHJys9V5tk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"callerId\": \"cmbzxhx1m0000q4c28mer2d38\",\r\n  \"receiverId\": \"cmc027dsg0008q49zav5glm7e\",\r\n  \"channel_name\": \"call_channel_123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/call/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"call",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### 📋 Description\n\nGenerates a dummy token and creates a new audio call session between a caller and receiver. This token is required to join a specific audio call channel.\n\n---\n\n### 🔐 Authorization\n\n**Required** – A valid JWT token must be provided in the `Authorization` header:\n\n```\nAuthorization: Bearer <JWT_TOKEN>\n\n ```\n\n---\n\n## 🧾 Endpoint\n\n```\nPOST /call/token\n\n ```\n\n---\n\n### 📥 Request Body\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| callerId | string | ✅ | Unique ID of the caller (CUID format) |\n| receiverId | string | ✅ | Unique ID of the receiver (CUID format) |\n| channel_name | string | ✅ | Name of the audio call channel (min. 3 characters) |\n\n#### 📘 Example\n\n``` json\n{\n  \"callerId\": \"clx6uev4e0000vb0gx3u8q9uw\",\n  \"receiverId\": \"clx6uev4e0001vb0gx3u8q9ux\",\n  \"channel_name\": \"english-practice-room\"\n}\n\n ```\n\n---\n\n### ✅ Success Response – `200 OK`\n\n``` json\n{\n  \"success\": true,\n  \"data\": {\n    \"channel\": \"english-practice-room\",\n    \"token\": \"dummy-token-h72kj1as8\",\n    \"createdAt\": \"2025-06-17T05:45:12.222Z\"\n  }\n}\n\n ```\n\n---\n\n### ❌ Error Responses\n\n#### 🔸 400 Bad Request – Invalid Input\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Invalid input\",\n  \"details\": [ /* Zod validation errors */ ]\n}\n\n ```\n\n#### 🔸 500 Internal Server Error – Failed to Create Session\n\n``` json\n{\n  \"success\": false,\n  \"error\": \"Failed to create call session\",\n  \"details\": \"Database error or unknown issue\"\n}\n\n ```\n\n---\n\n### 🧪 Test Instructions\n\nUse Postman to send a `POST` request to `/call/token` with a valid caller ID, receiver ID, and a custom `channel_name`. A token will be generated and stored in the database along with the call session metadata."
+		}
+	]
+}
