@@ -2,7 +2,6 @@
 
 A modular backend for **Young Guru Academy**, a mobile-first spoken English app. This assignment demonstrates clean backend design using **Node.js**, **Express**, and **PostgreSQL** – covering authentication, test engine logic, course access, simulated payment, and audio call setup.
 
----
 
 ## 🔧 How to Run the Project Locally
 
@@ -25,9 +24,6 @@ pnpm db:seed
 
 # 5. Start the server
 pnpm dev
-```
-
----
 
 ## 🧩 Tech Stack Used
 
@@ -42,8 +38,6 @@ pnpm dev
 | API Format   | RESTful JSON                    |
 | Structure    | MVC (controllers, services, etc.) |
 
----
-
 ## 🔗 API Routes
 
 ### 🔐 Authentication
@@ -52,8 +46,6 @@ pnpm dev
 |--------|-------------------|-------------------------------|
 | POST   | `/auth/login`     | Simulated login via OTP       |
 
----
-
 ### 🧠 Level Matching Test Engine
 
 | Method | Endpoint           | Description                       |
@@ -61,15 +53,11 @@ pnpm dev
 | POST   | `/test/start`      | Returns hardcoded 20 MCQs         |
 | POST   | `/test/submit`     | Submits answers, scores level     |
 
----
-
 ### 🎓 Courses
 
 | Method | Endpoint       | Description                        |
 |--------|----------------|------------------------------------|
 | GET    | `/courses`     | List of 3 dummy courses (locked/unlocked) |
-
----
 
 ### 💳 Payment
 
@@ -78,15 +66,11 @@ pnpm dev
 | POST   | `/payment/order`   | Create a dummy Razorpay order   |
 | POST   | `/payment/verify`  | Simulate payment & unlock course |
 
----
-
 ### 📞 Audio Call
 
 | Method | Endpoint        | Description                         |
 |--------|-----------------|-------------------------------------|
 | POST   | `/call/token`   | Create audio session & dummy token  |
-
----
 
 ## 🗃️ Database Schema
 
@@ -99,8 +83,6 @@ pnpm dev
 - `course_access` – user_id, course_id, unlocked_at
 - `call_sessions` – caller_id, receiver_id, channel, token, created_at
 
----
-
 ## 🤖 Simulated or Hardcoded Parts
 
 | Feature        | Simulation Method                    |
@@ -110,8 +92,6 @@ pnpm dev
 | Razorpay       | Order & status mocked                |
 | ZegoCloud Token| Dummy token string generated         |
 
----
-
 ## 👥 Test Users
 
 | User     | Phone Number     | OTP     |
@@ -120,8 +100,6 @@ pnpm dev
 | User B   | +918765432109    | 654321  |
 
 Use these for testing login, calls, and authorization.
-
----
 
 ## 📦 Postman Collection
 
@@ -133,13 +111,9 @@ You can find all routes in the [Postman Collection JSON](./young-guru-backend.po
 - ✅ Payment Flow
 - ✅ Call Token API
 
----
-
 ## 💡 Assumptions Made
 
 - Firebase OTP is simulated via a static in-memory store.
 - Payment verification is mocked (not Razorpay SDK).
 - Only one quiz test is supported and results overwrite previous ones.
 - Video URLs and course data are static.
-
----
