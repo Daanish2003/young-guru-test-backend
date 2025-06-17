@@ -143,4 +143,3 @@ You can find all routes in the [Postman Collection JSON](./young-guru-backend.po
 - Video URLs and course data are static.
 
 ---
-# young-guru-test-backend
